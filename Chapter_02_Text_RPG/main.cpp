@@ -388,7 +388,13 @@ void adventure(Player* player) {
 	do {
 		Monster monster;
 		int randomMonsterIndex = (rand() % (player->getLv() + 1)) + (player->getLv() - 1);
-		monster = monsterType[randomMonsterIndex];
+
+		if (randomMonsterIndex < monsterType.size()) {
+			monster = monsterType[randomMonsterIndex];
+		}
+		else {
+			monster = monsterType[monsterType.size() - 1];
+		}
 
 		cout << "============================================\n	< Select Action >" << endl;
 		cout << "1. Adventure	2. Rest	3. Status" << endl;
