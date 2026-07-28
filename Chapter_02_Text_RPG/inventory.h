@@ -68,31 +68,37 @@ public:
 			cout << "* Couldn't find the item to delete.\nProceed with the game without organizing inventory.\n" << endl;
 		}
 	}
-	void setInventoryItem(T item) {
+	void setInventoryItem(T item, int setNumOfItem) {
 		bool isItem = false;
 		Item acquiredItem = item;
 		for (int i = 0; i < this->inventorySize; i++) {
 			this->temp = &(this->pItems[i]);
 			if (this->temp->name == acquiredItem.name) {
-				(this->temp->numOfItems)++;
+				this->temp->numOfItems = setNumOfItem;
 				isItem = true;
 				break;
 			}
 		}
 		this->temp = nullptr;
-		if (!isItem) {
+		if (!isItem && setNumOfItem > 0) {
 			this->addInventoryItem(item);
 		}
 	}
-	void setInventoryItem(string itemName, int setNumOfItem) {
+	void setInventoryItem(string itemName, int setNumOfItem, int setPrice) {
+		bool isItem = false;
 		for (int i = 0; i < this->inventorySize; i++) {
 			this->temp = &(this->pItems[i]);
 			if (this->temp->name == itemName) {
 				this->temp->numOfItems = setNumOfItem;
+				isItem = true;
 				break;
 			}
 		}
 		this->temp = nullptr;
+		if (!isItem && setNumOfItem > 0) {
+			Item item = { itemName, 1, setPrice };
+			this->addInventoryItem(item);
+		}
 	}
 
 	const bool checkIndexItem(int itemIndex, string itemName) {

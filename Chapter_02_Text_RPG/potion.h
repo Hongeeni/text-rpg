@@ -3,12 +3,12 @@
 
 #include "item.h"
 
-class PotionRecipe {
+class Potion {
 protected:
 	map<string, vector<string>> recipeList = {};
 
 public:
-	PotionRecipe(void);
+	Potion(void);
 
 	void setRecipeList(string potionName, vector<string> potionIngredient);
 	const map<string, vector<string>> getRecipeList(void);

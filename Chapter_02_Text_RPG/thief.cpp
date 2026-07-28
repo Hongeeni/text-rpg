@@ -35,13 +35,13 @@ void Thief::attack(Monster* monster) {
 		if (isPlayerTurn) {
 			int randomNum = (rand() % 2);
 			int playerATK = (this->getPower() - monster->getDefence());
-			cout << "-------------- Player's Turn --------------\n" << endl;
+			cout << "-------------- Player's Turn --------------" << endl;
 			cout << "1. Attack the monster\n2. Hide and attack from behind.\n3. Use item." << endl;
 			cout << "-------------------------------------------" << endl;
 			cout << "Choose: ";
 			cin >> userInput;
 			system("cls");
-			if (userInput >= "0" && userInput <= "4") {
+			if (userInput > "0" && userInput < "4") {
 				inputMenu = stoi(userInput);
 			}
 			else {
@@ -52,13 +52,13 @@ void Thief::attack(Monster* monster) {
 					this->printPlayerCondition();
 					monster->printMonsterCondition();
 					cout << "===========================================\n" << endl;
-					cout << "-------------- Player's Turn --------------\n" << endl;
+					cout << "-------------- Player's Turn --------------" << endl;
 					cout << "1. Attack the monster\n2. Hide and attack from behind.\n3. Use item." << endl;
 					cout << "-------------------------------------------" << endl;
 					cout << "Invalid input. Try again.\n\nChoose: ";
 					cin >> userInput;
 					system("cls");
-				} while (userInput <= "0" || userInput >= "4");
+				} while (userInput < "1" || userInput > "3");
 				inputMenu = stoi(userInput);
 			}
 			cout << "===========================================" << endl;
@@ -90,13 +90,13 @@ void Thief::attack(Monster* monster) {
 					cout << "\n	=> Got: " << item.name << "!" << endl;
 
 					if (this->inventory->getInventorySize() < this->inventory->getCapacity()) {
-						this->inventory->setInventoryItem(item);
+						this->inventory->setInventoryItem(item, (this->inventory->getInventoryItem(item.name).numOfItems + 1));
 						cout << "	=> Saved to inventory." << endl;
 					}
 					else {
 						cout << "	=> Inventory is full.\n	=> Expanding the inventory.\n" << endl;
 						this->inventory->resizeInventory(this->inventory->getCapacity() + 5);
-						this->inventory->setInventoryItem(item);
+						this->inventory->setInventoryItem(item, (this->inventory->getInventoryItem(item.name).numOfItems + 1));
 						cout << "	=> Saved to inventory." << endl;
 					}
 				}
@@ -131,13 +131,13 @@ void Thief::attack(Monster* monster) {
 						cout << "\n	=> Got: " << item.name << "!" << endl;
 
 						if (this->inventory->getInventorySize() < this->inventory->getCapacity()) {
-							this->inventory->setInventoryItem(item);
+							this->inventory->setInventoryItem(item, (this->inventory->getInventoryItem(item.name).numOfItems + 1));
 							cout << "	=> Saved to inventory." << endl;
 						}
 						else {
 							cout << "	=> Inventory is full.\n	=> Expanding the inventory.\n" << endl;
 							this->inventory->resizeInventory(this->inventory->getCapacity() + 5);
-							this->inventory->setInventoryItem(item);
+							this->inventory->setInventoryItem(item, (this->inventory->getInventoryItem(item.name).numOfItems + 1));
 							cout << "	=> Saved to inventory." << endl;
 						}
 					}

@@ -106,55 +106,50 @@ void Player::useItem(void) {
 		cin >> userInput;
 		cout << endl;
 
-		if (userInput > "0" && userInput <= "9") {
+		if (userInput > "0" && userInput < to_string(this->inventory->getInventorySize())) {
 			inputItem = stoi(userInput) - 1;
 		}
-		else if (userInput == "10") {
-			inputItem = 9;
+		else if (userInput >= to_string(this->inventory->getInventorySize()) && userInput < to_string(this->inventory->getCapacity())) {
+			cout << "No items in that slot.\n" << endl;
+			continue;
 		}
 		else {
 			cout << "Invalid input. Try again.\n" << endl;
 			continue;
 		}
 
-		if (inputItem >= 0 && inputItem < this->inventory->getInventorySize()) {
-			if (this->inventory->checkIndexItem(inputItem, "HP Potion")) {
-				if (this->getCurrentHP() < this->getMaxHP()) {
-					this->inventory->setInventoryItem("HP Potion", (this->inventory->getInventoryItem("HP Potion").numOfItems - 1));
-					if ((this->getCurrentHP() + 20) < this->getMaxHP()) {
-						this->setCurrentHP(this->getCurrentHP() + 20);
-					}
-					else {
-						this->setCurrentHP(this->getMaxHP());
-					}
-					cout << "* HP increased by 20. (HP Potion used: " << this->inventory->getInventoryItem("HP Potion").numOfItems << " left)\n" << endl;
+		if (this->inventory->checkIndexItem(inputItem, "HP Potion")) {
+			if (this->getCurrentHP() < this->getMaxHP()) {
+				this->inventory->setInventoryItem("HP Potion", (this->inventory->getInventoryItem("HP Potion").numOfItems - 1), 50);
+				if ((this->getCurrentHP() + 30) < this->getMaxHP()) {
+					this->setCurrentHP(this->getCurrentHP() + 30);
 				}
 				else {
-					cout << "* Recovery is already complete.\n" << endl;
+					this->setCurrentHP(this->getMaxHP());
 				}
-			}
-			else if (this->inventory->checkIndexItem(inputItem, "MP Potion")) {
-				if (this->getCurrentMP() < this->getMaxMP()) {
-					this->inventory->setInventoryItem("MP Potion", (this->inventory->getInventoryItem("MP Potion").numOfItems - 1));
-					if ((this->getCurrentMP() + 20) < this->getMaxMP()) {
-						this->setCurrentMP(this->getCurrentMP() + 20);
-					}
-					else {
-						this->setCurrentMP(this->getMaxMP());
-					}
-					cout << "* MP increased by 20. (MP Potion used: " << this->inventory->getInventoryItem("MP Potion").numOfItems << " left)\n" << endl;
-				}
-				else {
-					cout << "* Recovery is already complete.\n" << endl;
-				}
+				cout << "* HP increased by 30. (HP Potion used: " << this->inventory->getInventoryItem("HP Potion").numOfItems << " left)\n" << endl;
 			}
 			else {
-				cout << "That item is currently unavailable.\n" << endl;
-				inputItem = 0;
+				cout << "* Recovery is already complete.\n" << endl;
+			}
+		}
+		else if (this->inventory->checkIndexItem(inputItem, "MP Potion")) {
+			if (this->getCurrentMP() < this->getMaxMP()) {
+				this->inventory->setInventoryItem("MP Potion", (this->inventory->getInventoryItem("MP Potion").numOfItems - 1), 50);
+				if ((this->getCurrentMP() + 30) < this->getMaxMP()) {
+					this->setCurrentMP(this->getCurrentMP() + 30);
+				}
+				else {
+					this->setCurrentMP(this->getMaxMP());
+				}
+				cout << "* MP increased by 30. (MP Potion used: " << this->inventory->getInventoryItem("MP Potion").numOfItems << " left)\n" << endl;
+			}
+			else {
+				cout << "* Recovery is already complete.\n" << endl;
 			}
 		}
 		else {
-			cout << "No items in that slot.\n" << endl;
+			cout << "That item is currently unavailable.\n" << endl;
 			inputItem = 0;
 		}
 	} while (inputItem < 0 && inputItem >= 10);
@@ -174,7 +169,7 @@ void Player::gainExp(int expReward) {
 		this->currentHP = this->stats[0];
 		this->currentMP = this->stats[1];
 		this->exp = 0;
-		this->maxExp = (maxExp * 4) / 3;
+		this->maxExp = (maxExp * 3) / 2;
 		this->level++;
 	}
 	else {

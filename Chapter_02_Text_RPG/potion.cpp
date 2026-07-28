@@ -1,23 +1,23 @@
 #include "potion.h"
 
-PotionRecipe::PotionRecipe(void) {
+Potion::Potion(void) {
 	recipeList = {
 	{ "HP Potion", { "Herb", "Holy Water" } },
 	{ "MP Potion", { "Mana Herb", "Holy Water" } }
 	};
 }
 
-void PotionRecipe::setRecipeList(string potionName, vector<string> potionIngredient) {
+void Potion::setRecipeList(string potionName, vector<string> potionIngredient) {
 	this->recipeList[potionName] = potionIngredient;
 }
-const map<string, vector<string>> PotionRecipe::getRecipeList(void) {
+const map<string, vector<string>> Potion::getRecipeList(void) {
 	return this->recipeList;
 }
 
-const void PotionRecipe::printRecipe(string potionName) {
+const void Potion::printRecipe(string potionName) {
 	cout << potionName << " ( " << this->recipeList[potionName][0] << ", " << this->recipeList[potionName][1] << " )" << endl;
 }
-const void PotionRecipe::printAllRecipes(void) {
+const void Potion::printAllRecipes(void) {
 	cout << "=========== < All recipes > ===========" << endl;
 	for (auto recipe = this->recipeList.begin(); recipe != this->recipeList.end(); recipe++) {
 		cout << "=> ";
@@ -28,7 +28,7 @@ const void PotionRecipe::printAllRecipes(void) {
 	system("cls");
 }
 
-const void PotionRecipe::searchByName(string potionName) {
+const void Potion::searchByName(string potionName) {
 	bool isFound = false;
 	string tempName = "None";
 
@@ -54,7 +54,7 @@ const void PotionRecipe::searchByName(string potionName) {
 	system("pause");
 	system("cls");
 }
-const void PotionRecipe::searchByIngredient(string potionIngredient) {
+const void Potion::searchByIngredient(string potionIngredient) {
 	bool isSpacing = false;
 	bool isFound = false;
 

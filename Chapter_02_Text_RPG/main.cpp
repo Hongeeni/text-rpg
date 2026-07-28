@@ -7,18 +7,18 @@
 #include <cstdlib>
 #include <ctime>
 
-Monster slime("Slime", 12, 130, 100, 30, "Slime's Jelly", 7);
-Monster herbGoat("Herb Goat", 30, 165, 135, 50, "Herb", 23);
-Monster moonWolf("MoonWolf", 48, 190, 160, 75, "Mana Herb", 32);
-Monster undine("Undine", 62, 230, 200, 93, "Holy Water", 41);
-Monster golem("Golem", 83, 300, 210, 105, "Golem's Stone", 65);
+Monster slime("Slime", 17, 130, 100, 30, "Slime's Jelly", 7);
+Monster herbGoat("Herb Goat", 24, 165, 130, 50, "Herb", 23);
+Monster moonWolf("MoonWolf", 30, 190, 155, 75, "Mana Herb", 32);
+Monster undine("Undine", 53, 230, 200, 93, "Holy Water", 41);
+Monster golem("Golem", 75, 300, 210, 105, "Golem's Stone", 65);
 vector<Monster> monsterType = { slime , herbGoat, moonWolf, undine, golem };
 
 void setStatus(string* name, int (*stats)[]);
 void printStatus(const string name, const int stats[]);
 void restTent(Player* player, Inventory<Item>* playerInventory);
 void selectJob(Player** player, const string name, const int stats[]);
-void potionWorkshop(PotionRecipe potionRecipe);
+void potionWorkshop(Player* player, Inventory<Item>* playerInventory, Potion potionRecipe);
 void adventure(Player* player);
 
 int main(void) {
@@ -59,39 +59,39 @@ void setStatus(string* name, int (*stats)[]) {
 	cout << "Enter your hero's name: ";
 	cin >> *name;
 	cout << endl;
-	cout << "(HP and MP input range : 100 ~ 250)\nEnter HP: ";
+	cout << "(HP and MP input range : 100 ~ 200)\nEnter HP: ";
 	cin >> (*stats)[0];
 	cout << "Enter MP: ";
 	cin >> (*stats)[1];
 	cout << endl;
-	cout << "(Attack and Defence input range : 50 ~ 150)\nEnter Attack: ";
+	cout << "(Attack and Defence input range : 50 ~ 100)\nEnter Attack: ";
 	cin >> (*stats)[2];
 	cout << "Enter Defence: ";
 	cin >> (*stats)[3];
 	cout << endl;
 
 	// check HP and MP
-	if (((*stats)[0] < 99 || (*stats)[1] < 99) || ((*stats)[0] > 251 || (*stats)[1] > 251)) {
+	if (((*stats)[0] < 99 || (*stats)[1] < 99) || ((*stats)[0] > 201 || (*stats)[1] > 201)) {
 		do {
 			cout << "\nHP or MP is outside The input range. Try again." << endl;
-			cout << "(HP and MP input range : 100 ~ 250)\nEnter HP: ";
+			cout << "(HP and MP input range : 100 ~ 200)\nEnter HP: ";
 			cin >> (*stats)[0];
 			cout << "Enter MP: ";
 			cin >> (*stats)[1];
 			cout << endl;
-		} while (((*stats)[0] < 99 || (*stats)[1] < 99) || ((*stats)[0] > 251 || (*stats)[1] > 251));
+		} while (((*stats)[0] < 99 || (*stats)[1] < 99) || ((*stats)[0] > 201 || (*stats)[1] > 201));
 	}
 
 	// check ATK and DEF
-	if (((*stats)[2] < 49 || (*stats)[3] < 49) || ((*stats)[2] > 151 || (*stats)[3] > 151)) {
+	if (((*stats)[2] < 49 || (*stats)[3] < 49) || ((*stats)[2] > 101 || (*stats)[3] > 101)) {
 		do {
 			cout << "Attack or Defense is outside The input range. Try again." << endl;
-			cout << "(Attack and Defence input range : 50 ~ 150)\nEnter Attack: ";
+			cout << "(Attack and Defence input range : 50 ~ 125)\nEnter Attack: ";
 			cin >> (*stats)[2];
 			cout << "Enter Defence: ";
 			cin >> (*stats)[3];
 			cout << endl;
-		} while (((*stats)[2] < 49 || (*stats)[3] < 49) || ((*stats)[2] > 151 || (*stats)[3] > 151));
+		} while (((*stats)[2] < 49 || (*stats)[3] < 49) || ((*stats)[2] > 101 || (*stats)[3] > 101));
 	}
 }
 
@@ -140,14 +140,14 @@ void restTent(Player* player, Inventory<Item>* playerInventory) {
 		case 1:
 			if (playerInventory->getInventoryItem("HP Potion").numOfItems > 0) {
 				if (player->getCurrentHP() < player->getMaxHP()) {
-					playerInventory->setInventoryItem("HP Potion", (playerInventory->getInventoryItem("HP Potion").numOfItems - 1));
-					if ((player->getCurrentHP() + 20) < player->getMaxHP()) {
-						player->setCurrentHP(player->getCurrentHP() + 20);
+					playerInventory->setInventoryItem("HP Potion", (playerInventory->getInventoryItem("HP Potion").numOfItems - 1), 50);
+					if ((player->getCurrentHP() + 30) < player->getMaxHP()) {
+						player->setCurrentHP(player->getCurrentHP() + 30);
 					}
 					else {
 						player->setCurrentHP(player->getMaxHP());
 					}
-					cout << "* HP increased by 20. (HP Potion used: " << playerInventory->getInventoryItem("HP Potion").numOfItems << " left)\n" << endl;
+					cout << "* HP increased by 30. (HP Potion used: " << playerInventory->getInventoryItem("HP Potion").numOfItems << " left)\n" << endl;
 				}
 				else {
 					cout << "* Recovery is already complete.\n" << endl;
@@ -162,14 +162,14 @@ void restTent(Player* player, Inventory<Item>* playerInventory) {
 		case 2:
 			if (playerInventory->getInventoryItem("MP Potion").numOfItems > 0) {
 				if (player->getCurrentMP() < player->getMaxMP()) {
-					playerInventory->setInventoryItem("MP Potion", (playerInventory->getInventoryItem("MP Potion").numOfItems - 1));
-					if ((player->getCurrentMP() + 20) < player->getMaxMP()) {
-						player->setCurrentMP(player->getCurrentMP() + 20);
+					playerInventory->setInventoryItem("MP Potion", (playerInventory->getInventoryItem("MP Potion").numOfItems - 1), 50);
+					if ((player->getCurrentMP() + 30) < player->getMaxMP()) {
+						player->setCurrentMP(player->getCurrentMP() + 30);
 					}
 					else {
 						player->setCurrentMP(player->getMaxMP());
 					}
-					cout << "* MP increased by 20. (MP Potion used: " << playerInventory->getInventoryItem("MP Potion").numOfItems << " left)\n" << endl;
+					cout << "* MP increased by 30. (MP Potion used: " << playerInventory->getInventoryItem("MP Potion").numOfItems << " left)\n" << endl;
 				}
 				else {
 					cout << "* Recovery is already complete.\n" << endl;
@@ -239,7 +239,7 @@ void selectJob(Player** player, const string name, const int stats[]) {
 	}
 }
 
-void potionWorkshop(PotionRecipe potionRecipe) {
+void potionWorkshop(Player* player, Inventory<Item>* playerInventory, Potion potionRecipe) {
 	int inputMenu = 0;
 	string userInput = "None";
 	string lowerByUserInput = "None";
@@ -294,31 +294,108 @@ void potionWorkshop(PotionRecipe potionRecipe) {
 			potionRecipe.searchByIngredient(lowerByUserInput);
 			break;
 		case 4:
+			vector<Item> selectIngredients;
+			system("cls");
+			do {
+				cout << "Selected Making Potion.\nSelect the ingredients to use for making the potion." << endl << endl;
+				player->sortItems();
+				playerInventory->printInventory(player->getName());
+				cout << "Select the number to choose the first ingredient: ";
+				cin >> userInput;
+				if (userInput > "0" && userInput <= to_string(playerInventory->getInventorySize())) {
+					selectIngredients.push_back(playerInventory->pItems[stoi(userInput) - 1]);
+					cout << "Select the number to choose the second ingredient: ";
+					cin >> userInput;
+					cout << endl;
+
+					if (userInput > "0" && userInput <= to_string(playerInventory->getInventorySize())) {
+						selectIngredients.push_back(playerInventory->pItems[stoi(userInput) - 1]);
+						for (auto potion : potionRecipe.getRecipeList()) {
+							if (selectIngredients[0].name == potion.second[0]) {
+								if (selectIngredients[1].name == potion.second[1]) {
+									cout << "Make a " << potion.first << endl;
+									playerInventory->setInventoryItem(selectIngredients[0], (playerInventory->getInventoryItem(selectIngredients[0].name).numOfItems - 1));
+									playerInventory->setInventoryItem(selectIngredients[1], (playerInventory->getInventoryItem(selectIngredients[1].name).numOfItems - 1));
+									playerInventory->setInventoryItem(potion.first, (playerInventory->getInventoryItem(potion.first).numOfItems + 1), 50);
+									system("pause");
+									system("cls");
+									break;
+								}
+								else {
+									cout << "No potions available to craft.\nExiting Potion Making.\n" << endl;
+									system("pause");
+									system("cls");
+									break;
+								}
+							}
+							else if (selectIngredients[0].name == potion.second[1]) {
+								if (selectIngredients[1].name == potion.second[0]) {
+									cout << "Make a " << potion.first << endl;
+									playerInventory->setInventoryItem(selectIngredients[0], (playerInventory->getInventoryItem(selectIngredients[0].name).numOfItems - 1));
+									playerInventory->setInventoryItem(selectIngredients[1], (playerInventory->getInventoryItem(selectIngredients[1].name).numOfItems - 1));
+									playerInventory->setInventoryItem(potion.first, (playerInventory->getInventoryItem(potion.first).numOfItems + 1), 50);
+									system("pause");
+									system("cls");
+									break;
+								}
+								else {
+									cout << "No potions available to craft.\nExiting Potion Making.\n" << endl;
+									system("pause");
+									system("cls");
+									break;
+								}
+							}
+							else {
+								cout << "No potions available to craft.\nExiting Potion Making.\n" << endl;
+								system("pause");
+								system("cls");
+								break;
+							}
+						}
+					}
+					else if (userInput > to_string(playerInventory->getInventorySize()) && userInput <= to_string(playerInventory->getCapacity())) {
+						cout << "No items in that slot.\n" << endl;
+						system("pause");
+						system("cls");
+					}
+					else {
+						cout << "Invalid input.\n" << endl;
+						system("pause");
+						system("cls");
+					}
+				}
+				else if (userInput > to_string(playerInventory->getInventorySize()) && userInput <= to_string(playerInventory->getCapacity())) {
+					cout << "No items in that slot.\n" << endl;
+					system("pause");
+					system("cls");
+				}
+				else {
+					cout << "Invalid input. Try again.\n" << endl;
+					system("pause");
+					system("cls");
+				}
+			} while (userInput <= "0" && userInput > to_string(playerInventory->getInventorySize()));
 			break;
 		}
 	} while (inputMenu != 0);
 }
 
 void adventure(Player* player) {
-	//PotionRecipe Class
-	PotionRecipe potionRecipe;
-
+	Potion potionRecipe;
 	string userInput = "None";
 	int inputMenu = 0;
 
 	do {
 		Monster monster;
-
-		int randomMonsterIndex = rand() % monsterType.size();
+		int randomMonsterIndex = (rand() % (player->getLv() + 1)) + (player->getLv() - 1);
 		monster = monsterType[randomMonsterIndex];
 
 		cout << "============================================\n	< Select Action >" << endl;
-		cout << "1. Adventure!	2. Rest	3. Status" << endl;
+		cout << "1. Adventure	2. Rest	3. Status" << endl;
 		cout << "4. Inventory	5. Potion Shop	0. Exit Game" << endl;
 		cout << "============================================" << endl;
 		cout << "Choose: ";
 		cin >> userInput;
-
 		if (userInput >= "0" && userInput < "6") {
 			inputMenu = stoi(userInput);
 			system("cls");
@@ -326,7 +403,6 @@ void adventure(Player* player) {
 		else {
 			cout << "Invalid input. Try again.\n" << endl;
 			inputMenu = 9;
-
 			system("pause");
 			system("cls");
 			continue;
@@ -389,7 +465,7 @@ void adventure(Player* player) {
 			system("cls");
 			break;
 		case 5:
-			potionWorkshop(potionRecipe);
+			potionWorkshop(player, player->inventory, potionRecipe);
 			break;
 		}
 	} while (inputMenu != 0);
